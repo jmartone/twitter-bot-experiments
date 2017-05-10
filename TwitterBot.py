@@ -1,29 +1,22 @@
 import tweepy
 from queue import Queue
-import threading
-
-def threaded(fn):
-	def wrapper(*args, **kwargs):
-		thread = threading.Thread(target=fn, args=args, kwargs=kwargs)
-		thread.setDaemon(True)
-		thread.start()
-		return thread
-	return wrapper
+from thread_wrapper import threaded
 
 class TwitterBot(object):
 
-	def __init__(self, CREDS, filters, callback):
-		# intialize twitter API
-		self.twitterAuth = tweepy.OAuthHandler(CREDS['CONSUMER_KEY'], CREDS['CONSUMER_SECRET'])
-		self.twitterAuth.set_access_token(CREDS['ACCESS_TOKEN'], CREDS['ACCESS_TOKEN_SECRET'])
+	def __init__(self, filters = None, callback = None, creds = None, twitterAuth = None):
+		if (twitterAuth):
+			self.twitterAuth = twitterAuth
+		else:
+			# intialize twitter API
+			self.twitterAuth = tweepy.OAuthHandler(creds['CONSUMER_KEY'], creds['CONSUMER_SECRET'])
+			self.twitterAuth.set_access_token(creds['ACCESS_TOKEN'], creds['ACCESS_TOKEN_SECRET'])
 		# set the filters
 		if (type(filters) == list):
 			self.filters = filters
 		else:
 			self.filters = [filters]
 		self.callback = callback
-
-
 
 	@threaded
 	def _startThreaded(self):
