@@ -3,7 +3,7 @@ import re
 import pandas as pd
 
 characters = defaultdict(list)
-with open('love_actually.txt') as f:
+with open('love_actually/love_actually.txt') as f:
     for line in f:
         if re.match(r'^[A-Z]+:', line):
             colon = line.find(':')
@@ -18,5 +18,5 @@ final_characters = characters_df.iloc[:15, :]
 final_characters = final_characters['character']
 
 for character in final_characters:
-    with open(character + '.txt', 'a') as lines:
+    with open('love_actually/' + character + '.txt', 'a') as lines:
         lines.write('\n'.join(characters[character]))
