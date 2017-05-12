@@ -49,7 +49,7 @@ class TwitterBot(object):
 			@threaded
 			def handleQueue(self):
 				while True:
-					if (self.enableCache)
+					if (self.enableCache):
 						# convert the queue to a list and dump it to the cache
 						joblib.dump(list(self.q.queue), self.cacheDir + self.cacheFile)
 					status = self.q.get()
