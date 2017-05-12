@@ -86,14 +86,14 @@ for i, prize in prizes.iterrows():
 # Google Sheets does not have a native insert row API call, so I built my own
 def insertRow(spreadsheetId, sheetId, startRow, valuesArray):
 	# convert multidimensional array to json
-	values = [
-		[
+	rows = [
+		{'values': [
 			{
 				'userEnteredValue': {
 					'stringValue': value
 				}
 			} for value in row
-		] for row in valuesArray
+		]} for row in valuesArray
 	]
 	# create the requests, first inserting rows, then adding data in the empty rows
 	requests = {
@@ -104,17 +104,13 @@ def insertRow(spreadsheetId, sheetId, startRow, valuesArray):
 						'sheetId': sheetId,
 						"dimension": "ROWS",
 						"startIndex": startRow,
-						"endIndex": startRow + len(values)
+						"endIndex": startRow + len(valuesArray)
 					}
 				}
 			},
 			{
 				'updateCells': {
-					'rows': [
-						{
-							'values': values
-						}
-					],
+					'rows': rows,
 					'fields': '*',
 					'start': {
 						'sheetId': sheetId,
